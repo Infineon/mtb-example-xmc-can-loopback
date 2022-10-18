@@ -44,24 +44,35 @@
 #include "xmc_can.h"
 #include "xmc_gpio.h"
 #include "xmc_scu.h"
-#include "retarget_io.h"
+#include "cy_retarget_io.h"
 #include <stdio.h>
+#include <inttypes.h>
+#include "xmc_device.h"
 
 /*******************************************************************************
 * Defines
 *******************************************************************************/
+
+/* Define macro to enable/disable printing of debug messages */
+#define ENABLE_XMC_DEBUG_PRINT              (0)
+
+/* Define macro to set the loop count before printing debug messages */
+#if ENABLE_XMC_DEBUG_PRINT
+#define DEBUG_LOOP_COUNT_MAX                (1U)
+#endif
+
 /* Declarations for System timer timing */
-#define TICKS_PER_SECOND         1000       /* Tick per Second */
+#define TICKS_PER_SECOND         1000       /* Tick per second */
 #define TICKS_WAIT_MS            1000       /* 1000 milliseconds */
 
-#ifdef TARGET_KIT_XMC14_BOOT_001
+#if (UC_SERIES == XMC14)
+/* XMC 1400 device */
 #define CAN_SERVICE_REQUEST      0U                       /* Interrupt output line of multiCAN module */
 #define CAN_CLOCK_SOURCE         XMC_CAN_CANCLKSRC_MCLK   /* CAN module clock source  - Peripheral Clock*/
 #define IRQ_NUMBER               IRQ3_IRQn                /* Interrupt number */
 #define CAN_IRQ_HANDLER          IRQ3_Handler             /* CAN Interrupt Handler */
-#endif
-
-#ifdef TARGET_KIT_XMC47_RELAX_V1
+#else
+/* XMC 4000 family */
 #define CAN_SERVICE_REQUEST      7U                       /* Interrupt output line of multiCAN module */
 #define CAN_CLOCK_SOURCE         XMC_CAN_CANCLKSRC_FPERI  /* CAN module clock source  - Peripheral Clock*/
 #define IRQ_NUMBER               CAN0_7_IRQn              /* Interrupt number */
@@ -214,8 +225,13 @@ int main(void)
     {
         CY_ASSERT(0);
     }
-    /* Initialize printf retarget */
-    retarget_io_init();
+
+    /* Initialize retarget-io to use the debug UART port */
+    cy_retarget_io_init(CYBSP_DEBUG_UART_HW);
+
+    #if ENABLE_XMC_DEBUG_PRINT
+    printf("Initialization done\r\n");
+    #endif
 
     printf("\r\n*********************************\r\n");
     printf("CAN Loopback Example project\n\r");
@@ -272,10 +288,10 @@ int main(void)
     /*Allocate Message object 4 to Node 1 */
     XMC_CAN_AllocateMOtoNodeList(CAN, NODE1, MESSAGE_OBJECT4);
 
-#ifdef TARGET_KIT_XMC14_BOOT_001
+    #if (UC_SERIES == XMC14)
     /* Interrupt Multiplexer configuration */
     XMC_SCU_SetInterruptControl(IRQ_NUMBER, XMC_SCU_IRQCTRL_CAN0_SR0_IRQ3);
-#endif
+    #endif
 
     /*Enable NVIC node*/
     NVIC_EnableIRQ(IRQ_NUMBER);
@@ -290,8 +306,8 @@ int main(void)
         {
             /* Print the received frame in serial terminal */
             printf("Received CAN frame\n\r");
-            printf( "Data1: %lx\n\r", CAN_message_2.can_data[DATA0_IDX]);
-            printf( "Data2: %lx\n\r", CAN_message_2.can_data[DATA1_IDX]);
+            printf( "Data1: %"PRIx32"\n\r", CAN_message_2.can_data[DATA0_IDX]);
+            printf( "Data2: %"PRIx32"\n\r", CAN_message_2.can_data[DATA1_IDX]);
 
             /* Reset flag */
             frame_received = false;

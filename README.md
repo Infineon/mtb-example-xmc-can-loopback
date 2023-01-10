@@ -1,10 +1,14 @@
-# XMC&trade; MCU: CAN loopback
+# XMC&trade; MCU: CAN receiver
 
-This code example demonstrates the communication between two CAN nodes in the loopback mode using XMC&trade; MCU. 
+This code example demonstrates how to receive CAN messages over the CAN bus using XMC&trade; MCU. This code example can be used together with the [CAN transmitter](https://github.com/Infineon/mtb-example-xmc-can-transmitter) example running on another board.
 
 [View this README on GitHub.](https://github.com/Infineon/mtb-example-xmc-can-loopback)
 
-[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzI2MjYiLCJTcGVjIE51bWJlciI6IjAwMi0zMjYyNiIsIkRvYyBUaXRsZSI6IlhNQyZ0cmFkZTsgTUNVOiBDQU4gbG9vcGJhY2siLCJyaWQiOiJhcmVtIiwiRG9jIHZlcnNpb24iOiIyLjAuMCIsIkRvYyBMYW5ndWFnZSI6IkVuZ2xpc2giLCJEb2MgRGl2aXNpb24iOiJNQ0QiLCJEb2MgQlUiOiJJQ1ciLCJEb2MgRmFtaWx5IjoiTi9BIn0=)
+[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzI2MjYiLCJTcGVjIE51bWJlciI6IjAwMi0zMjYyNiIsIkRvYyBUaXRsZSI6IlhNQyZ0cmFkZTsgTUNVOiBDQU4gcmVjZWl2ZXIiLCJyaWQiOiJhcmVtIiwiRG9jIHZlcnNpb24iOiIyLjEuMCIsIkRvYyBMYW5ndWFnZSI6IkVuZ2xpc2giLCJEb2MgRGl2aXNpb24iOiJNQ0QiLCJEb2MgQlUiOiJJQ1ciLCJEb2MgRmFtaWx5IjoiTi9BIn0=)
+
+[View this README on GitHub.](https://github.com/Infineon/mtb-example-xmc-can-loopback)
+
+[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzI2MjYiLCJTcGVjIE51bWJlciI6IjAwMi0zMjYyNiIsIkRvYyBUaXRsZSI6IlhNQyZ0cmFkZTsgTUNVOiBDQU4gcmVjZWl2ZXIiLCJyaWQiOiJhcmVtIiwiRG9jIHZlcnNpb24iOiIyLjEuMCIsIkRvYyBMYW5ndWFnZSI6IkVuZ2xpc2giLCJEb2MgRGl2aXNpb24iOiJNQ0QiLCJEb2MgQlUiOiJJQ1ciLCJEb2MgRmFtaWx5IjoiTi9BIn0=)
 
 ## Requirements
 
@@ -21,8 +25,13 @@ This code example demonstrates the communication between two CAN nodes in the lo
 
 ## Supported kits (make variable 'TARGET')
 
-- [XMC1400 boot kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc14_boot_001/) (`KIT_XMC14_BOOT_001`) - Default value of `TARGET`
+- [XMC1400 boot kit](https://www.infineon.com/cms/en/product/evaluation-boards/KIT_XMC47_RELAX_V1/) (`KIT_XMC47_RELAX_V1`) - Default value of `TARGET`
+- [XMC4200 Platform2Go kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc_plt2go_xmc4200/) (`KIT_XMC_PLT2GO_XMC4200`)
+- [XMC4300 relax EtherCAT kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc43_relax_ecat_v1/) (`KIT_XMC43_RELAX_ECAT_V1`)
+- [XMC4400 Platform2Go kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc_plt2go_xmc4400/) (`KIT_XMC_PLT2GO_XMC4400`)
+- [XMC4500 relax kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc45_relax_v1/) (`KIT_XMC45_RELAX_V1`)
 - [XMC4700 relax kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc47_relax_v1/) (`KIT_XMC47_RELAX_V1`)
+- [XMC4800 relax EtherCAT kit](https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc48_relax_ecat_v1/) (`KIT_XMC48_RELAX_ECAT_V1`)
 
 ## Hardware setup
 
@@ -58,7 +67,7 @@ Create the project and open it using one of the following:
 
 6. Click **Create** to complete the application creation process.
 
-For more details, see the [Eclipse IDE for ModusToolbox&trade; software user guide](https://www.infineon.com/MTBEclipseIDEUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/ide_{version}/docs/mt_ide_user_guide.pdf*).
+For more details, see the [Eclipse IDE for ModusToolbox&trade; software user guide](https://www.infineon.com/MTBEclipseIDEUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mt_ide_user_guide.pdf*).
 
 </details>
 
@@ -79,27 +88,62 @@ Argument | Description | Required/optional
 
 <br>
 
-The following example will clone the "[CAN Loopback](https://github.com/Infineon/mtb-example-xmc-can-loopback)" application with the desired name "CANLoopback" configured for the *KIT_XMC14_BOOT_001* BSP into the specified working directory, *C:/mtb_projects*:
+The following example clones the "[CAN Loopback](https://github.com/Infineon/mtb-example-xmc-can-loopback)" application with the desired name "CANLoopback" configured for the *KIT_XMC47_RELAX_V1* BSP into the specified working directory, *C:/mtb_projects*:
 
    ```
-   project-creator-cli --board-id KIT_XMC14_BOOT_001 --app-id mtb-example-xmc-can-loopback --user-app-name CANLoopback --target-dir "C:/mtb_projects"
+   project-creator-cli --board-id KIT_XMC47_RELAX_V1 --app-id mtb-example-xmc-can-loopback --user-app-name CANLoopback --target-dir "C:/mtb_projects"
    ```
 
 **Note:** The project-creator-cli tool uses the `git clone` and `make getlibs` commands to fetch the repository and import the required libraries. For details, see the "Project creator tools" section of the [ModusToolbox&trade; software user guide](https://www.infineon.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
 
+To work with a different supported kit later, use the [Library Manager](https://www.infineon.com/ModusToolboxLibraryManager) to choose the BSP for the supported kit. You can invoke the Library Manager GUI tool from the terminal using `make library-manager` command or use the Library Manager CLI tool "library-manager-cli" to change the BSP.
+
+The "library-manager-cli" tool has the following arguments:
+
+Argument | Description | Required/optional
+---------|-------------|-----------
+`--add-bsp-name` | Name of the BSP that should be added to the application | Required
+`--set-active-bsp` | Name of the BSP that should be as active BSP for the application | Required
+`--add-bsp-version`| Specify the version of the BSP that should be added to the application if you do not wish to use the latest from manifest | Optional
+`--add-bsp-location`| Specify the location of the BSP (local/shared) if you prefer to add the BSP in a shared path | Optional
+
+<br />
+
+Following example adds the KIT_XMC48_RELAX_ECAT_V1 BSP to the already created application and makes it the active BSP for the app:
+
+   ```
+   library-manager-cli --project "C:/mtb_projects/CANLoopback" --add-bsp-name KIT_XMC48_RELAX_ECAT_V1 --add-bsp-version "latest-v4.X" --add-bsp-location "local"
+
+   library-manager-cli --project "C:/mtb_projects/CANLoopback" --set-active-bsp APP_KIT_XMC48_RELAX_ECAT_V1
+   ```
+
 </details>
 
-<details open><summary><b>In third-party IDEs</b></summary>
+<details><summary><b>In third-party IDEs</b></summary>
 
-**Note:** Only VS code is supported.
+Use one of the following options:
 
-1. Follow the instructions from the **In command-line interface (CLI)** section to create the application, and import the libraries using the `make getlibs` command.
+- **Use the standalone [Project Creator](https://www.infineon.com/ModusToolboxProjectCreator) tool:**
 
-2. Export the application to a supported IDE using the `make <ide>` command.
+   1. Launch Project Creator from the Windows Start menu or from *{ModusToolbox&trade; software install directory}/tools_{version}/project-creator/project-creator.exe*.
 
-   For a list of supported IDEs and more details, see the "Exporting to IDEs" section of the [ModusToolbox&trade; software user guide](https://www.infineon.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
+   2. In the initial **Choose Board Support Package** screen, select the BSP, and click **Next**.
 
-3. Follow the instructions displayed in the terminal to create or import the application as an IDE project.
+   3. In the **Select Application** screen, select the appropriate IDE from the **Target IDE** drop-down menu.
+
+   4. Click **Create** and follow the instructions printed in the bottom pane to import or open the exported project in the respective IDE.
+
+<br />
+
+- **Use command-line interface (CLI):**
+
+   1. Follow the instructions from the **In command-line interface (CLI)** section to create the application.
+
+   2. Export the application to a supported IDE using the `make <ide>` command.
+
+   3. Follow the instructions displayed in the terminal to create or import the application as an IDE project.
+
+For a list of supported IDEs and more details, see the "Exporting to IDEs" section of the [ModusToolbox&trade; software user guide](https://www.infineon.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
 
 </details>
 
@@ -123,13 +167,13 @@ The following example will clone the "[CAN Loopback](https://github.com/Infineon
 
 ## Debugging
 
-You can debug the example to step through the code. In the IDE, use the **\<Application Name> Debug (JLink)** configuration in the **Quick Panel**. For more details, see the "Program and Debug" section in the [Eclipse IDE for ModusToolbox&trade; user guide](https://www.cypress.com/MTBEclipseIDEUserGuide).
+You can debug the example to step through the code. In the IDE, use the **\<Application Name> Debug (JLink)** configuration in the **Quick Panel**. For more details, see the "Program and debug" section in the [Eclipse IDE for ModusToolbox&trade; software user guide](https://www.infineon.com/MTBEclipseIDEUserGuide).
 
-## Design and implementation 
+## Design and implementation
 
-The CAN loopback mode of the XMC&trade; MCU is used for the in-system testing of the MultiCAN+ module as well as the development of CAN driver software without access to an external CAN bus. The loopback feature consists of an internal CAN bus and a bus select switch for each CAN node. When the CAN nodes are connected in the loopback mode, the CAN node is connected to the internal CAN bus. 
+The CAN loopback mode of the XMC&trade; MCU is used for the in-system testing of the MultiCAN+ module as well as the development of CAN driver software without access to an external CAN bus. The loopback feature consists of an internal CAN bus and a bus select switch for each CAN node. When the CAN nodes are connected in the loopback mode, the CAN node is connected to the internal CAN bus.
 
-In this example project, two CAN nodes (Node 0 and Node 1) are connected to the internal CAN bus by configuring them in the loopback mode. Two Message Objects (MO2 and MO4) are configured in the transmit and the receive directions respectively. The MO2 object is linked to Node 0 and the MO4 object is linked to Node 1. Node 1 transmits the CAN message (MO4) every second. Node 0 receives this CAN message and toggles the User LED every time when a new CAN message is received. The received CAN message can be viewed in the serial terminal using the UART communication.
+In this example project, two CAN nodes (Node 0 and Node 1) are connected to the internal CAN bus by configuring them in the loopback mode. Two Message Objects (MO2 and MO4) are configured in the transmit and the receive directions respectively. The MO2 object is linked to Node 0 and the MO4 object is linked to Node 1. Node 1 transmits the CAN message (MO4) every second. Node 0 receives this CAN message and toggles the user LED every time when a new CAN message is received. The received CAN message can be viewed in the serial terminal using the UART communication.
 
 **Figure 2. Firmware flowchart**
 
@@ -159,18 +203,17 @@ The project uses a custom *design.modus* file because the following settings wer
 
 Resources  | Links
 -----------|----------------------------------
-Code examples  | [Using ModusToolbox&trade; software](https://github.com/Infineon/Code-Examples-for-ModusToolbox-Software) on GitHub 
+Code examples  | [Using ModusToolbox&trade; software](https://github.com/Infineon/Code-Examples-for-ModusToolbox-Software) on GitHub
 Device documentation | [XMC1000 family datasheets](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/32-bit-xmc1000-industrial-microcontroller-arm-cortex-m0/#document-group-myInfineon-49) <br> [XMC1000 family technical reference manuals](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/32-bit-xmc1000-industrial-microcontroller-arm-cortex-m0/#document-group-myInfineon-44) <br> [XMC4000 family datasheets](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/32-bit-xmc4000-industrial-microcontroller-arm-cortex-m4/#document-group-myInfineon-49) <br> [XMC4000 family technical reference manuals](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/32-bit-xmc4000-industrial-microcontroller-arm-cortex-m4/#document-group-myInfineon-44)
-Development kits | [XMC eval boards](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/#boards) 
-Libraries on GitHub  | [mtb-xmclib-cat3](https://github.com/Infineon/mtb-xmclib-cat3) – XMC Peripheral Library (XMCLib)  
-Tools  | [Eclipse IDE for ModusToolbox&trade; software](https://www.infineon.com/modustoolbox) – ModusToolbox&trade; software is a collection of easy-to-use software and tools enabling rapid development with Infineon MCUs, covering applications from embedded sense and control to wireless and cloud-connected systems using AIROC&trade; Wi-Fi and Bluetooth® connectivity devices. 
-
+Development kits | [XMC&trade; MCU eval boards](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/#boards)
+Libraries on GitHub  | [mtb-xmclib-cat3](https://github.com/Infineon/mtb-xmclib-cat3) – XMC&trade; MCU peripheral library (XMCLib)
+Tools | [Eclipse IDE for ModusToolbox&trade; software](https://www.infineon.com/modustoolbox) – ModusToolbox&trade; software is a collection of easy-to-use software and tools enabling rapid development with Infineon MCUs, covering applications from embedded sense and control to wireless and cloud-connected systems using AIROC&trade; Wi-Fi and Bluetooth&reg; connectivity devices.
 
 ## Other resources
 
 Infineon provides a wealth of data at www.infineon.com to help you select the right device, and quickly and effectively integrate it into your design.
 
-For XMC&trade; MCU devices, see [32-bit XMC™ Industrial microcontroller based on Arm® Cortex®-M](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/).
+For XMC&trade; MCU devices, see [32-bit XMC&trade; Industrial microcontroller based on Arm&reg; Cortex&reg;-M](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/).
 
 ## Document history
 
@@ -180,7 +223,8 @@ Document title: *CE232626* - *XMC&trade; MCU: CAN loopback*
 | ------- | --------------------- |
 | 1.0.0   | New code example      |
 | 1.1.0   | Added support for new kits |
-| 2.0.0   | Updated to support ModusToolbox&trade; software v3.0, CE will not be backwards compatible with previous versions of ModusToolbox&trade; software. |
+| 2.0.0   | Updated to support ModusToolbox&trade; software v3.0. This CE is not backward compatible with previous version of ModusToolbox&trade; software.|
+| 2.1.0   | Added support for CAN personality |
 ------
 
 All other trademarks or registered trademarks referenced herein are the property of their respective owners.
